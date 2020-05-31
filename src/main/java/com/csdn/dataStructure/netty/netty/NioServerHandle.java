@@ -28,10 +28,22 @@ public class NioServerHandle extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-        System.out.println("server ctx = " + ctx);
-        ByteBuf byteBuf = (ByteBuf) msg;    //netty提供的buffer缓冲区
-        System.out.println("客户端发送的数据是：" + byteBuf.toString(CharsetUtil.UTF_8));
-        System.out.println("客户端地址是：" + ctx.channel().remoteAddress());
+        ctx.channel().eventLoop().execute(() -> {
+            try {
+                Thread.sleep(10 * 1000);
+                System.out.println("hello, server 01");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        System.out.println("go on ..");
+
+//        System.out.println("server ctx = " + ctx);
+//        ByteBuf byteBuf = (ByteBuf) msg;    //netty提供的buffer缓冲区
+//        System.out.println("客户端发送的数据是：" + byteBuf.toString(CharsetUtil.UTF_8));
+//        System.out.println("客户端地址是：" + ctx.channel().remoteAddress());
 
     }
 
