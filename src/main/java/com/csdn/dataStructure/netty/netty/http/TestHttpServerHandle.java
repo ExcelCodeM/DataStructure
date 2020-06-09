@@ -7,6 +7,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
+import java.net.URI;
+
 /**
  * @author ：Breeze
  * @date ：Created in 2020/5/31 23:39
@@ -15,14 +17,21 @@ import io.netty.util.CharsetUtil;
 
 /**
  * 1、SimpleChannelInboundHandler 继承 ChannelInboundHandle
- * 2、HttpRequest 参数，表示handle会将请求封装成HttpRequest类型
+ * 2、HttpObject 参数，表示handle会将请求封装成HttpObject类型
  */
-public class TestHttpServerHandle extends SimpleChannelInboundHandler<HttpRequest> {
+public class TestHttpServerHandle extends SimpleChannelInboundHandler<HttpObject> {
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, HttpRequest msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
 
         if (msg instanceof HttpRequest) {
+
+            //浏览器对项目图标的请求过滤
+            HttpRequest httpRequest = (HttpRequest) msg;
+            URI uri = new URI(httpRequest.uri());
+            if("/favicon.ico".equals(uri.getPath())){
+                return;
+            }
 
             System.out.println(msg.getClass());
             System.out.println(ctx.channel().remoteAddress());
@@ -31,7 +40,7 @@ public class TestHttpServerHandle extends SimpleChannelInboundHandler<HttpReques
 
             DefaultFullHttpResponse httpResponse = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, byteBuf);
 
-            httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");
+            httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain;charset=UTF-8");
             httpResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, byteBuf.readableBytes());
 
             ctx.channel().writeAndFlush(httpResponse);

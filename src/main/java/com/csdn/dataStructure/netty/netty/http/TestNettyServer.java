@@ -2,6 +2,7 @@ package com.csdn.dataStructure.netty.netty.http;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -27,11 +28,13 @@ public class TestNettyServer {
 
             bootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
+                    .option(ChannelOption.SO_BACKLOG, 128)      //设置线程队列得到连接的个数
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)      //设置保持活动连接状态
                     .childHandler(new TestNettyInitializer());
 
-            ChannelFuture channelFuture = bootstrap.bind(6668).sync();
+            ChannelFuture channelFuture = bootstrap.bind(12345).sync();
 
-            channelFuture.channel().closeFuture();
+            channelFuture.channel().closeFuture().sync();
 
         }finally {
             bossGroup.shutdownGracefully();
