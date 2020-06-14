@@ -19,5 +19,7 @@ public class TestNettyInitializer extends ChannelInitializer<SocketChannel> {
 
         pipeline.addLast("myHttpServerCodec", new HttpServerCodec());
         pipeline.addLast("myTestHttpServerHandle",new TestHttpServerHandle());
+
+        System.out.println("ok");
     }
 }

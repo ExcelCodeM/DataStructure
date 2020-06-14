@@ -39,7 +39,7 @@ public class NioServerHandle extends ChannelInboundHandlerAdapter {
         });
 
         System.out.println("go on ..");
-
+        System.out.println(msg);
 //        System.out.println("server ctx = " + ctx);
 //        ByteBuf byteBuf = (ByteBuf) msg;    //netty提供的buffer缓冲区
 //        System.out.println("客户端发送的数据是：" + byteBuf.toString(CharsetUtil.UTF_8));

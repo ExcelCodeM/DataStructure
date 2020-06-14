@@ -16,7 +16,8 @@ public class NioClientHandle extends ChannelInboundHandlerAdapter {
     //连接准备就绪，执行此方法
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        ctx.writeAndFlush(Unpooled.copiedBuffer("hello 服务器, 我是客户端", CharsetUtil.UTF_8));
+        //ctx.writeAndFlush(Unpooled.copiedBuffer("hello 服务器, 我是客户端", CharsetUtil.UTF_8));
+        ctx.writeAndFlush("hello 服务器, 我是客户端");
         System.out.println(ctx);
     }
 
